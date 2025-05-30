@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -52,16 +53,54 @@ public class UnitSelectionManager : MonoBehaviour
 
             Rect selectionAreaRect = GetSelectionAreaRect();
 
-            for (int i = 0; i < localTransfromArray.Length; i++)
-            {
-                LocalTransform unitLocalTransform = localTransfromArray[i];
-                Vector2 unitScreenPosition = Camera.main.WorldToScreenPoint(unitLocalTransform.Position);
+            float selectionAreaSize = selectionAreaRect.width + selectionAreaRect.height;
+            float multipleSelectionSizeMinimun = 40f;
+            bool isMultiplerSelection = selectionAreaSize > multipleSelectionSizeMinimun;
 
-                if (selectionAreaRect.Contains(unitScreenPosition))
+            if (isMultiplerSelection)
+            {
+                for (int i = 0; i < localTransfromArray.Length; i++)
                 {
-                    entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
+                    LocalTransform unitLocalTransform = localTransfromArray[i];
+                    Vector2 unitScreenPosition = Camera.main.WorldToScreenPoint(unitLocalTransform.Position);
+
+                    if (selectionAreaRect.Contains(unitScreenPosition))
+                    {
+                        entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
+                    }
                 }
             }
+            else
+            {
+                // Same as : new EntityQueryBuilder(Allocator.Temp).WithAll<PhysicsWorldSingleton>().Build(entityManager);
+                entityQuery = entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+                PhysicsWorldSingleton physicsWorldSingleton = entityQuery.GetSingleton<PhysicsWorldSingleton>();
+
+                CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
+
+                UnityEngine.Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                int unitsLayer = 6;
+                RaycastInput raycastInput = new RaycastInput
+                {
+                    Start = cameraRay.GetPoint(0f),
+                    End = cameraRay.GetPoint(999f),
+                    Filter = new CollisionFilter
+                    {
+                        BelongsTo = ~0u,
+                        CollidesWith = 1u << unitsLayer,
+                        GroupIndex = 0,
+                    }
+                };
+                if(collisionWorld.CastRay(raycastInput, out Unity.Physics.RaycastHit raycastHit))
+                {
+                    if(entityManager.HasComponent<Unit>(raycastHit.Entity))
+                    {
+                        entityManager.SetComponentEnabled<Selected>(raycastHit.Entity, true);
+                    }
+                }
+
+            }
+
             OnSelectionAreaEnd?.Invoke();
         }
 
@@ -89,13 +128,13 @@ public class UnitSelectionManager : MonoBehaviour
     {
         Vector2 selectionEndMousePosition = Input.mousePosition;
         Vector2 lowerLeftCorner = new Vector2(
-            Math.Min(selectionStartMousePosition.x, selectionEndMousePosition.x),
-            Math.Min(selectionStartMousePosition.y, selectionEndMousePosition.y)
+            System.Math.Min(selectionStartMousePosition.x, selectionEndMousePosition.x),
+            System.Math.Min(selectionStartMousePosition.y, selectionEndMousePosition.y)
             );
 
         Vector2 upperRightCorner = new Vector2(
-            Math.Max(selectionStartMousePosition.x, selectionEndMousePosition.x),
-            Math.Max(selectionStartMousePosition.y, selectionEndMousePosition.y)
+            System.Math.Max(selectionStartMousePosition.x, selectionEndMousePosition.x),
+            System.Math.Max(selectionStartMousePosition.y, selectionEndMousePosition.y)
             );
         return new Rect(
             lowerLeftCorner.x,

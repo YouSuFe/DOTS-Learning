@@ -690,6 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectionAreaRectTransform: {fileID: 198529765}
+  canvas: {fileID: 1145348780}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
