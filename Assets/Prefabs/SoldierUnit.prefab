@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerMax: 0.2
+  damageAmount: 5
 --- !u!4 &7955365855371780941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1621844920127157671, guid: 3f12784635ba74587981f19ce2885039, type: 3}
