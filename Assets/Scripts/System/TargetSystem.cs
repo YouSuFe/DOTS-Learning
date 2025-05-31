@@ -44,6 +44,11 @@ partial struct TargetSystem : ISystem
             {
                 foreach(DistanceHit distanceHit in distanceHitList)
                 {
+                    // To prevent further searching for this object if it is destroyed.
+                    if(!SystemAPI.Exists(distanceHit.Entity) || !SystemAPI.HasComponent<Unit>(distanceHit.Entity))
+                    {
+                        continue;
+                    }
                     Unit targetUnit = SystemAPI.GetComponent<Unit>(distanceHit.Entity);
                     if (targetUnit.faction == findTarget.ValueRO.targetFaction)
                     {
