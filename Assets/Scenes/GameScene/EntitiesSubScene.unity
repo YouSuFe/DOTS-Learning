@@ -425,6 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefabGameObject: {fileID: 1155767269988537842, guid: b9abf6371a25c4e96b392397f4399125, type: 3}
   zombiePrefabGameobjcet: {fileID: 2647506090576740971, guid: fca361b93ad044358b0d0de569369afd, type: 3}
+  shootLightPrefabGameobjcet: {fileID: 5327104121327704324, guid: 3160932e2a16546588521e162d87fd77, type: 3}
 --- !u!4 &1108065382
 Transform:
   m_ObjectHideFlags: 0

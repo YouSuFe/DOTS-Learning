@@ -39,8 +39,6 @@ partial struct HealthBarSystem : ISystem
                 continue;
             }
 
-            Debug.Log("Health visual update");
-
             float healthNormalized = (float)health.healthAmount / health.healthAmountMax;
 
             // To hide the bar if health is full
