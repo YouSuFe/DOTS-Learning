@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UnitMoverAuthoring : MonoBehaviour
 {
-    public float value;
+    public float moveSpeed;
     public float rotationSpeed;
 
     public class Baker : Baker<UnitMoverAuthoring>
@@ -14,7 +14,7 @@ public class UnitMoverAuthoring : MonoBehaviour
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new UnitMover
             {
-                value = authoring.value,
+                moveSpeed = authoring.moveSpeed,
                 rotationSpeed = authoring.rotationSpeed,
             });
         }
@@ -23,7 +23,7 @@ public class UnitMoverAuthoring : MonoBehaviour
 
 public struct UnitMover : IComponentData
 {
-    public float value;
+    public float moveSpeed;
     public float rotationSpeed;
     public float3 targetPosition;
 }

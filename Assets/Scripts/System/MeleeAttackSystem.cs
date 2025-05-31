@@ -24,7 +24,7 @@ partial struct MeleeAttackSystem : ISystem
                 RefRO<LocalTransform>,
                 RefRW<MeleeAttack>,
                 RefRO<Target>,
-                RefRW<UnitMover>>())
+                RefRW<UnitMover>>().WithDisabled<MoveOverride>())
         {
             if(target.ValueRO.targetEntity == Entity.Null)
             {
@@ -34,11 +34,12 @@ partial struct MeleeAttackSystem : ISystem
             LocalTransform targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
 
             float meleeAttackDistanceSq = 2f;
-            bool isCloseEnoughToAttack = math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) > meleeAttackDistanceSq;
+
+            bool isCloseEnoughToAttack = math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) < meleeAttackDistanceSq;
 
             // This check for different size of collider ones, this calculates the collider and if it can attack to that size, not only 2
             bool isTouchingTarget = false;
-            if(!isCloseEnoughToAttack)
+            if (!isCloseEnoughToAttack)
             {
                 float3 directionToTarget = targetLocalTransform.Position - localTransform.ValueRO.Position;
                 directionToTarget = math.normalize(directionToTarget);
@@ -47,16 +48,16 @@ partial struct MeleeAttackSystem : ISystem
                 RaycastInput raycastInput = new RaycastInput
                 {
                     Start = localTransform.ValueRO.Position,
-                    End = localTransform.ValueRO.Position + directionToTarget * (meleeAttack.ValueRO.colliderSize * distanceExtraToTestRaycast),
+                    End = localTransform.ValueRO.Position + directionToTarget * (meleeAttack.ValueRO.colliderSize + distanceExtraToTestRaycast),
                     Filter = CollisionFilter.Default
                 };
                 raycastHitList.Clear();
 
-                if(collisionWorld.CastRay(raycastInput, ref raycastHitList))
+                if (collisionWorld.CastRay(raycastInput, ref raycastHitList))
                 {
-                    foreach(RaycastHit raycastHit in raycastHitList)
+                    foreach (RaycastHit raycastHit in raycastHitList)
                     {
-                        if(raycastHit.Entity == target.ValueRO.targetEntity)
+                        if (raycastHit.Entity == target.ValueRO.targetEntity)
                         {
                             // Raycast hit target, close enough to attack this entity
                             isTouchingTarget = true;
@@ -77,7 +78,7 @@ partial struct MeleeAttackSystem : ISystem
                 unitMover.ValueRW.targetPosition = localTransform.ValueRO.Position;
 
                 meleeAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-                if(meleeAttack.ValueRO.timer > 0)
+                if (meleeAttack.ValueRO.timer > 0)
                 {
                     continue;
                 }

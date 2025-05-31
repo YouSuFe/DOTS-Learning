@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1314872723578730762}
   - component: {fileID: -890836329691432551}
   - component: {fileID: 973516177732212827}
+  - component: {fileID: 3073762277334631746}
   m_Layer: 6
   m_Name: BaseUnit
   m_TagString: Untagged
@@ -391,7 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5443d3b3b129e4d39b1c372ff814618a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 5
+  moveSpeed: 3
   rotationSpeed: 30
 --- !u!136 &8064644339311460699
 CapsuleCollider:
@@ -468,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ac19eb0de51d41a79125cd7760d826a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 0
+  range: 5
   targetFaction: 0
   timerMax: 0.2
 --- !u!114 &1314872723578730762
@@ -507,5 +508,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3073762277334631746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7167482548507576218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6304c5fee2814ff89e84ba30b4fd6d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -49,7 +49,7 @@ public partial struct UnitMoverJob : IJobEntity
             quaternion.LookRotation(moveDirection, math.up()),
             deltaTime * unitMover.rotationSpeed);
 
-        physicsVelocity.Linear = moveDirection * unitMover.value;
+        physicsVelocity.Linear = moveDirection * unitMover.moveSpeed;
         physicsVelocity.Angular = float3.zero;
     }
 }
